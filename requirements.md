@@ -1,5 +1,3 @@
-## <remove all of the example text and notes in < > such as this one>
-
 ## Functional Requirements
 
 1. User Registration – The system shall allow users to register by providing a username, email, and password.
@@ -18,14 +16,11 @@
 14. View All Recipes – The system shall allow users to view a list of all publicly available recipes.
 15. Filter Recipes – The system shall allow users to filter recipes by tags such as 'vegan', 'dessert', etc.
 
-<using the syntax [](images/ui1.png) add images in a folder called images/ and place sketches of your webpages>
-
 ## Non-functional Requirements
 1. The system shall load recipe pages in under 2 seconds
 2. The system should support more than 100 users without performance issues
 
-<each of the 14 requirements will have a use case associated with it>
-## Use Cases <Add name of who will write (this specific requirement) and implement (in subsequent milestones) the use case below>
+## Use Cases
 
 1. User Registration (Written and will be implemented by Eric)
 - **Pre-condition:** Visitor is not logged in and has a valid email address.
@@ -100,13 +95,95 @@
 3. Recipe deleted before submission: System shows error.
 4. System issue: Changes not saved, and user is notified.
 
-6..
-7..
-8..
-9..
-10..
+# 6. Delete Recipe (Written and will be implemented by Rustico)
+- **Pre-condition:**
+User is logged into the webpage.
+- **Trigger:**
+User presses delete button on a recipe that they own (created).
+- **Primary Sequence:**
+1. User presses delete button on a recipe.
+2. Prompt opens to confirm the user wants to delete the recipe.
+3. The recipe chosen is removed from the database.
+4. User is informed that the recipe has been successfully deleted.
+5. Page is refreshed after user acknowledges the information.
+- **Primary Postconditions:** 
+Recipe has been deleted from the database and is no longer stored.
+- **Alternate Sequence:**
+1. User presses delete button on a recipe.
+2. Prompt opens to confirm the user wants to delete the recipe.
+3. Recipe cannot be found when searching the database to delete it.
+4. User is informed that the chosen recipe already doesn't exist.
+5. Page is refreshed after user acknowledges the information.
 
-11. Edit User Profile
+# 7. View Recipe (Written and will be implemented by Rustico)
+- **Pre-condition:**
+User is logged into the webpage.
+- **Trigger:**
+User presses delete button on a recipe that they own (created).
+- **Primary Sequence:**
+1. User uses some recipe access (search bar, direct URL, filter, etc).
+2. Prompt opens to confirm the user wants to delete the recipe.
+3. The recipe chosen is removed from the database.
+4. User is informed that the recipe has been successfully deleted.
+- **Primary Postconditions:** 
+Recipe has been deleted from the database and is no longer stored.
+- **Alternate Sequence:**
+1. User presses delete button.
+2. Prompt opens to confirm the user wants to delete the recipe.
+3. Recipe cannot be found when searching the database to delete it.
+4. User is informed that the chosen recipe already doesn't exist.
+
+# 8. Search Recipe (Written and will be implemented by Rustico)
+1. User types in a search parameter (tag, name, etc.) into search bar.
+2. A page listing all relevant recipes is shown.
+3. User looks for the specific recipe they are interested in (scrolling through the list).
+4. The user finds their desired recipe and clicks a link to access the recipe's page.
+- **Primary Postconditions:**
+N/A - No data was added or changed (considering current use cases and functionality).
+- **Alternate Sequence:**
+1. User types in a search parameter (tag, name, etc.) into search bar.
+2. No recipes are found with the specificied keywords and search parameters.
+3. User is informed that no results have been found.
+
+# 9. Rate Recipe (Written and will be implemented by Rustico)
+- **Pre-condition:**
+User has an account in the database.
+User is logged into the webpage.
+The recipe to rate exists in the database.
+- **Trigger:**
+User presses rate button on a recipe that they do not own (created).
+1. User types in a search parameter (tag, name, etc.) into search bar.
+2. A page listing all relevant recipes is shown.
+3. User looks for the specific recipe they are interested in (scrolling through the list).
+4. The user finds their desired recipe and clicks a link to access the recipe's page.
+- **Primary Postconditions:**
+Average rating of a rated recipe is updated and stored.
+- **Alternate Sequence:**
+1. User uses some recipe access (search bar, direct URL, filter, account, etc).
+2. User presses rate button on their own created recipe and rates the recipe out of 5 stars.
+3. User is informed that they cannot rate their own recipes.
+
+# 10. Comment on Recipe (Written and will be implemented by Rustico)
+- **Pre-condition:**
+User has an account in the database.
+User is logged into the webpage.
+The recipe to comment on exists in the database.
+- **Trigger:**
+User presses comment button on a recipe regardless of ownership.
+1. User uses some recipe access (search bar, direct URL, filter, account, etc).
+2. User presses comment button on the page of the specific recipe they'd like to comment on.
+3. A text box appears and the user types out their comment.
+4. User presses submit and the comment is appended to the recipe.
+- **Primary Postconditions:**
+Information about comment count and accessible comments updates accordingly (comment shows on recipe, number increases by one).
+- **Alternate Sequence:**
+1. User uses some recipe access (search bar, direct URL, filter, account, etc).
+2. User presses comment button on the page of the specific recipe they'd like to comment on.
+3. A text box appears and the user types out their comment.
+4. User presses submit, but the recipe no longer exists (deleted by recipe owner or admin while the user was commenting).
+5. User is informed that the recipe no longer exists and cannot be commented on.
+
+11. Edit User Profile (Written and will be implemented by Jesse)
 - **Pre-condition:** 
 - User must have an existing account
 - User must be logged in
@@ -120,7 +197,7 @@
 1. Database unable to retrieve user profile
 2. User is not logged in in order to edit profile
 
-12. Save Recipe (Favorites)
+12. Save Recipe (Favorites) (Written and will be implemented by Jesse)
 - **Pre-condition:** 
 - User must have an existing account
 - User must be logged in
@@ -135,7 +212,7 @@
 1. User is not logged in
 2. Database save error
 
-13. View All Recipes
+13. View All Recipes (Written and will be implemented by Jesse)
 - **Pre-condition:** There must be a minimum of 1 recipe to view in order to view all recipes
 - **Trigger:** User navigated to / endpoint to view all recipes
 - **Primary Sequence:**
@@ -147,7 +224,7 @@
 1. Database fails to retrieve all recipes
 2. No recipes written to database when visiting / endpoint 
 
-14. Filter Recipes
+14. Filter Recipes (Written and will be implemented by Jesse)
 - **Pre-condition:** User must be on the recipe browsing page
 - **Trigger:** User selects a filter or tag
 - **Primary Sequence:**
@@ -158,7 +235,7 @@
 - **Alternate Sequence:**
 1. System does not find any recipe with the matching filter
 
-15. View User Profile
+15. View User Profile (Written and will be implemented by Jesse)
 - **Pre-condition:** 
 - User must have an existing account  
 - User must be logged in  

@@ -4,7 +4,7 @@ from flask import render_template
 from flask import redirect
 from flask import Flask, request # Added flask and request
 from flask_sqlalchemy import SQLAlchemy # Added SQLAlchemy
-from app.forms import RecipeForm, LoginForm
+from app.forms import RecipeForm, RegistrationForm # importing from forms.py
 from app.models import Recipe, User # importing from models.py
 from app import db
 from datetime import datetime # added datetime
@@ -69,3 +69,19 @@ def delete_recipe(integer):
     db.session.commit()
 
     return f"Recipe deleted: {integer}"
+
+@myapp_obj.route("/registration", methods=['GET', 'POST'])
+def login():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        username = form.username.data #1
+        email = form.email.data
+        password = form.password.data #1
+
+        u = User(username=username, email=email, password=password) #1
+        db.session.add(u)#1
+        db.session.commit() #1
+        
+        print(f"User registered: {username}")
+        return redirect("/")
+    return render_template("registration.html", form=form)

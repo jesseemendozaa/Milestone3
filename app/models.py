@@ -11,6 +11,6 @@ class Recipe(db.Model): #Recipe created by user
 
 class User(db.Model): #Account info
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(32))
-    password = db.Column(db.String(32))
-    email = db.Column(db.String(32))
+    username = db.Column(db.String(32), unique = True , nullable = False) #max length 32 characters
+    email = db.Column(db.String(100), unique = True , nullable = False) #max length 100 characters
+    password = db.Column(db.String(32), nullable = False) #max length 32 characters

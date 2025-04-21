@@ -10,8 +10,9 @@ class RecipeForm(FlaskForm): # form for creating recipe
     submit =  SubmitField("Create Recipe")
     remember_me = BooleanField("Remember Me")
 
-class LoginForm(FlaskForm): # form for user login
+class RegistrationForm(FlaskForm): # form for user registration
     username = StringField('USERNAME', validators=[validators.DataRequired()])
+    email = StringField('Email', validators=[validators.DataRequired(), validators.Email()])
     password = PasswordField('Password', validators=[validators.Length(min=4, max=35)])
     remember_me = BooleanField("Remember Me")
-    submit =  SubmitField("Log In")
+    submit =  SubmitField("Register")
