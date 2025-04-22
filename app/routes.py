@@ -1,10 +1,9 @@
 from ctypes import resize
 from app import myapp_obj
-from flask import render_template
-from flask import redirect
-from flask import Flask, request # Added flask and request
+from flask import Flask, redirect, request, render_template, flash
 from flask_sqlalchemy import SQLAlchemy # Added SQLAlchemy
-from app.forms import RecipeForm, RegistrationForm # importing from forms.py
+from app.forms import RecipeForm, RegistrationForm, LoginForm # importing from forms.py
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 from app.models import Recipe, User # importing from models.py
 from app import db
 from datetime import datetime # added datetime
@@ -71,7 +70,7 @@ def delete_recipe(integer):
     return f"Recipe deleted: {integer}"
 
 @myapp_obj.route("/registration", methods=['GET', 'POST'])
-def login():
+def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         username = form.username.data #1
@@ -85,3 +84,20 @@ def login():
         print(f"User registered: {username}")
         return redirect("/")
     return render_template("registration.html", form=form)
+
+@myapp_obj.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        users = User.query.all()
+        if username in users and users[username]['password'] == password:
+            user = User(username)
+            login_user(user)
+            flash('Logged in successfully.')
+            return rederict(url_for('protected'))
+        else:
+            flash('Invalid username or password.')
+    return render_template("login.html", form=form)
+        
