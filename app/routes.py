@@ -1,6 +1,6 @@
 from ctypes import resize
 from app import myapp_obj
-from flask import Flask, redirect, request, render_template, flash
+from flask import Flask, request, redirect, request, render_template, flash, url_for
 from flask_sqlalchemy import SQLAlchemy # Added SQLAlchemy
 from app.forms import RecipeForm, RegistrationForm, LoginForm # importing from forms.py
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
@@ -76,12 +76,14 @@ def register():
         username = form.username.data #1
         email = form.email.data
         password = form.password.data #1
-
-        u = User(username=username, email=email, password=password) #1
-        db.session.add(u)#1
-        db.session.commit() #1
-        
-        print(f"User registered: {username}")
+        users = User.query.all()
+        if email in users:
+            flash("Email is taken.")
+        else:
+            u = User(username=username, email=email, password=password) #1
+            db.session.add(u)#1
+            db.session.commit() #1
+            print(f"User registered: {username}")
         return redirect("/")
     return render_template("registration.html", form=form)
 
@@ -91,13 +93,17 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-        users = User.query.all()
-        if username in users and users[username]['password'] == password:
-            user = User(username)
+        user = User.query.filter_by(username=username).first()
+        if user and  user.password == password:
             login_user(user)
             flash('Logged in successfully.')
+            print("Logged in successfully.")
+            next_page = request.args.get('next')
+            if next_page:
+                return redirect(next_page)
             return redirect(url_for('protected'))
         else:
+            print("Failed to login")
             flash('Invalid username or password.')
     return render_template("login.html", form=form)
 
@@ -111,5 +117,5 @@ def logout():
 @myapp_obj.route('/protected')
 @login_required
 def protected():
-    flash("You are on a protected page")    
+    return render_template("protected.html")
         
