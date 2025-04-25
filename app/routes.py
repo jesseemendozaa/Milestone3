@@ -96,8 +96,20 @@ def login():
             user = User(username)
             login_user(user)
             flash('Logged in successfully.')
-            return rederict(url_for('protected'))
+            return redirect(url_for('protected'))
         else:
             flash('Invalid username or password.')
     return render_template("login.html", form=form)
+
+@myapp_obj.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Logged out succesfully')
+    return redirect(url_for('main'))    
+
+@myapp_obj.route('/protected')
+@login_required
+def protected():
+    flash("You are on a protected page")    
         
