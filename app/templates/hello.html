@@ -13,6 +13,7 @@
                     <li>Ingredients: {{recipe.ingredients}}</li>
                     <li>Instructions: {{recipe.instructions}}</li>
                     <li>Date: {{recipe.date}}</li>
+                    <li>Posted by: {{ recipe.user.username }}</li>
                 </ul>
             </li>
         {% else %}

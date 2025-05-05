@@ -11,11 +11,31 @@ class Recipe(db.Model): #Recipe created by user
     instructions = db.Column(db.Text) #text box
     date = db.Column(db.DateTime)
 
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref='recipes')
+    ratings = db.relationship('Rating', backref='recipe') #relationship with rating
+    comments = db.relationship('Comment', backref='recipe') #relationship with comment
+
 class User(db.Model, UserMixin): #Account info
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), unique = True , nullable = False) #max length 32 characters
     email = db.Column(db.String(100), unique = True , nullable = False) #max length 100 characters
     password = db.Column(db.String(32), nullable = False) #max length 32 characters
+    comments = db.relationship('Comment', backref='user') #relationship with comment
+    ratings = db.relationship('Rating', backref='user')
+
+class Comment (db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.Text, nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
+
+class Rating (db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    score = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
+
 
 @login_manager.user_loader
 def load_user(user_id):

@@ -2,9 +2,9 @@ from ctypes import resize
 from app import myapp_obj
 from flask import Flask, request, redirect, request, render_template, flash, url_for
 from flask_sqlalchemy import SQLAlchemy # Added SQLAlchemy
-from app.forms import RecipeForm, RegistrationForm, LoginForm # importing from forms.py
-from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
-from app.models import Recipe, User # importing from models.py
+from app.forms import RecipeForm, RegistrationForm, LoginForm, CommentForm, RatingForm # importing from forms.py
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
+from app.models import Recipe, User, Comment, Rating # importing from models.py
 from app import db
 from datetime import datetime # added datetime
 # from <X> import <Y>
@@ -41,11 +41,12 @@ def main():
     return render_template("hello.html", recipe=recipe)
 
 @myapp_obj.route("/recipe/new", methods=['GET', 'POST']) # http://127.0.0.1:5000/recipe/new
+@login_required
 def create_recipe():
     form = RecipeForm()
     if form.validate_on_submit():
         #create recipe
-        new_recipe = Recipe(title=form.title.data, description=form.description.data, ingredients=form.ingredients.data, instructions=form.instructions.data, date=datetime.now())
+        new_recipe = Recipe(title=form.title.data, description=form.description.data, ingredients=form.ingredients.data, instructions=form.instructions.data, date=datetime.now(), user_id=current_user.id) #1
         db.session.add(new_recipe) #adding to database
         db.session.commit()
         return redirect("/")
@@ -53,13 +54,37 @@ def create_recipe():
         print("MOOOO MOOO")
     return render_template("new.html", form=form) #recipe form
 
-@myapp_obj.route("/recipe/<int:integer>") # http://127.0.0.1:5000/recipe/<enter number here>
+@myapp_obj.route("/recipe/<int:integer>", methods=['GET', 'POST']) # http://127.0.0.1:5000/recipe/<enter number here>
+@login_required
 def return_recipe(integer):
     recipe = Recipe.query.get(integer) # get recipe number
     if recipe is None:
         print("Recipe not found") #prints to terminal
         return ""
-    return render_template("return_rec.html", recipe=recipe)
+    
+    comment_form = CommentForm() # create comment form
+    rating_form = RatingForm() # create rating form
+
+    #comment and rating form
+    if comment_form.validate_on_submit() and comment_form.submit.data:
+            new_comment = Comment(comment=comment_form.comment.data, user_id=current_user.id, recipe_id=recipe.id)
+            db.session.add(new_comment)
+            db.session.commit()
+            return redirect(request.path)
+    
+    if rating_form.validate_on_submit() and rating_form.submit.data:
+        existing_rating = Rating.query.filter_by(user_id=current_user.id, recipe_id=recipe.id).first()
+        if existing_rating:
+            existing_rating.score = rating_form.score.data
+        else:
+            new_rating = Rating(score=rating_form.score.data, user_id=current_user.id, recipe_id=recipe.id)
+            db.session.add(new_rating)
+        
+        db.session.commit()
+        return redirect(request.path)
+
+    comments = recipe.comments
+    return render_template("return_rec.html", recipe=recipe, comment_form=comment_form, rating_form=rating_form, comments=comments)
 
 @myapp_obj.route("/recipe/<int:integer>/delete") # http://127.0.0.1:5000/recipe/<enter number here>/delete
 def delete_recipe(integer):

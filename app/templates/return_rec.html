@@ -1,14 +1,43 @@
 <html>
 <head>
-    <title>Here is the recipe: {{recipe.id}}</title>
+    <title>Recipe Details - {{ recipe.title }}</title>
 </head>
 <body>
+    <h1>{{ recipe.title }}</h1>
+
+    <p>Description: {{ recipe.description }}</p>
+    <p>Ingredients: {{ recipe.ingredients }}</p>
+    <p>Instructions: {{ recipe.instructions }}</p>
+    <p>Date: {{ recipe.date }}</p>
+    <p>Posted by: {{ recipe.user.username }}</p>
+
+    <h3>Rate this recipe</h3>
+    <form method="POST">
+        {{ rating_form.hidden_tag() }}
+        {{ rating_form.score.label }} {{ rating_form.score(min=1, max=5) }}
+        {{ rating_form.submit() }}
+    </form>
+
+    <h3>User Ratings</h3>
     <ul>
-        <li>Title: {{recipe.title}}</li>
-        <li>Description: {{recipe.description}}</li>
-        <li>Ingredients: {{recipe.ingredients}}</li>
-        <li>Instructions: {{recipe.instructions}}</li>
-        <li>Date: {{recipe.date}}</li>
+        {% for r in recipe.ratings %}
+            <li>{{ r.user.username }} rated it {{ r.score }}/5</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Leave a Comment</h2>
+    <form method="POST">
+        {{ comment_form.hidden_tag() }}
+        {{ comment_form.comment.label }}<br>
+        {{ comment_form.comment(rows=3, cols=50) }}<br>
+        {{ comment_form.submit() }}
+    </form>
+
+    <h3>Comments</h3>
+    <ul>
+        {% for c in comments %}
+            <li>{{ c.user.username }}: {{ c.comment }}</li>
+        {% endfor %}
     </ul>
 </body>
 </html>
