@@ -121,8 +121,8 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and  user.password == password:
             login_user(user)
-            flash('Logged in successfully.')
-            print("Logged in successfully.")
+            flash('Logged in successfully')
+            print("Logged in successfully")
             next_page = request.args.get('next')
             if next_page:
                 return redirect(next_page)
@@ -131,6 +131,44 @@ def login():
             print("Failed to login")
             flash('Invalid username or password.')
     return render_template("login.html", form=form)
+
+#Favorites
+@myapp_obj.route("/favorite/<int:recipe_id>", methods=["POST"])
+@login_required
+def favorite_recipe(recipe_id):
+    recipe = Recipe.query.get(recipe_id)
+    if recipe is None:
+        flash("Recipe not found")
+        return redirect(url_for("main"))
+
+    if recipe not in current_user.favorites:
+        current_user.favorites.append(recipe)
+        db.session.commit()
+        flash("Recipe added to favorites")
+
+    return redirect(url_for("view_favorites"))
+
+#Unfavorites
+@myapp_obj.route("/unfavorite/<int:recipe_id>", methods=["POST"])
+@login_required
+def unfavorite_recipe(recipe_id):
+    recipe = Recipe.query.get(recipe_id)
+    if recipe is None:
+        flash("Recipe not found")
+        return redirect(url_for("main"))
+
+    if recipe in current_user.favorites:
+        current_user.favorites.remove(recipe)
+        db.session.commit()
+        flash("Recipe removed from favorites")
+
+    return redirect(url_for("view_favorites"))
+
+# View Favorites
+@myapp_obj.route("/favorites")
+@login_required
+def view_favorites():
+    return render_template("favorites.html", favorites=current_user.favorites)
 
 @myapp_obj.route('/logout')
 @login_required

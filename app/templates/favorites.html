@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>My Favorite Recipes</title>
+</head>
+<body>
+    <h1>My Favorite Recipes</h1>
+
+    {% if favorites %}
+        <ul>
+            {% for recipe in favorites %}
+                <li>
+                    <a href="{{ url_for('return_recipe', integer=recipe.id) }}">{{ recipe.title }}</a>
+                    <form action="{{ url_for('unfavorite_recipe', recipe_id=recipe.id) }}" method="POST">
+                        <button type="submit">Remove</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't saved any recipes to your favorites yet. Please add some recipes to your favorites.</p>
+    {% endif %}
+</body>
+</html>

@@ -3,6 +3,8 @@ from datetime import datetime
 from . import login_manager
 from flask_login import UserMixin
 
+favorites = db.Table('favorites', db.Column('user_id', db.Integer, db.ForeignKey('user.id')), db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')))
+
 class Recipe(db.Model): #Recipe created by user
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80)) #max length 80 characters
@@ -23,6 +25,7 @@ class User(db.Model, UserMixin): #Account info
     password = db.Column(db.String(32), nullable = False) #max length 32 characters
     comments = db.relationship('Comment', backref='user') #relationship with comment
     ratings = db.relationship('Rating', backref='user')
+    favorites = db.relationship('Recipe', secondary=favorites, backref='favorited_by')
 
 class Comment (db.Model):
     id = db.Column(db.Integer, primary_key=True)

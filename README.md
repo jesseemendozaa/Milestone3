@@ -19,7 +19,7 @@ install necessary libraries using pip3:
 pip3 install -r requirements.txt
 ```
 
-run in terminal:
+run in terminal one command at a time:
 ```
 flask shell
 from app import db
