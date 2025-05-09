@@ -1,0 +1,39 @@
+<html>
+    {% if recipe %}
+<head>
+    <title>Edit Recipe</title>
+</head>
+<body>
+    <h1>Edit Recipe</h1>
+
+    <h3>{{ recipe.title }}</h3>
+    <p>Description: {{ recipe.description }}</p>
+    <p>Ingredients: {{ recipe.ingredients }}</p>
+    <p>Instructions: {{ recipe.instructions }}</p>
+
+    <form action="" method="POST" novalidate>
+        {{form.hidden_tag()}}
+        <p> {{form.title.label}}</br>
+        {{form.title()}}</p>
+
+        <p>{{form.description.label}}</br>
+            <p>{{form.description()}}</p>
+
+        <p>{{form.ingredients.label}}</br>
+            <p>{{form.ingredients()}}</p>
+        
+        <p>{{form.instructions.label}}</br>
+            <p>{{form.instructions()}}</p>
+
+        <p>{{form.submit()}}</p>
+    </form>
+</body>
+    {% else %}
+<head>
+    <title>Recipe Not Found</title>
+</head>
+<body>
+    <h1>This Recipe is Not Found</h1>
+</body>
+    {% endif %}
+</html>

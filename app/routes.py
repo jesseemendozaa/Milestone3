@@ -2,7 +2,7 @@ from ctypes import resize
 from app import myapp_obj
 from flask import Flask, request, redirect, request, render_template, flash, url_for
 from flask_sqlalchemy import SQLAlchemy # Added SQLAlchemy
-from app.forms import RecipeForm, RegistrationForm, LoginForm, CommentForm, RatingForm # importing from forms.py
+from app.forms import *
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from app.models import Recipe, User, Comment, Rating # importing from models.py
 from app import db
@@ -35,8 +35,12 @@ deactivate
 
 '''
 
-@myapp_obj.route("/") # http://127.0.0.1:5000/
-def main():
+@myapp_obj.route("/")
+def home_page():
+    return redirect(url_for("login"))
+
+@myapp_obj.route("/recipes") # http://127.0.0.1:5000/recipes
+def view_all_recipes():
     recipe = Recipe.query.all() # get all recipes
     return render_template("hello.html", recipe=recipe)
 
@@ -50,8 +54,6 @@ def create_recipe():
         db.session.add(new_recipe) #adding to database
         db.session.commit()
         return redirect("/")
-    else:
-        print("MOOOO MOOO")
     return render_template("new.html", form=form) #recipe form
 
 @myapp_obj.route("/recipe/<int:integer>", methods=['GET', 'POST']) # http://127.0.0.1:5000/recipe/<enter number here>
@@ -114,6 +116,8 @@ def register():
 
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(f'/view/{current_user.username}')
     form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -126,9 +130,8 @@ def login():
             next_page = request.args.get('next')
             if next_page:
                 return redirect(next_page)
-            return redirect(url_for('protected'))
+            return redirect(url_for("view_profile", username=username))
         else:
-            print("Failed to login")
             flash('Invalid username or password.')
     return render_template("login.html", form=form)
 
@@ -170,15 +173,41 @@ def unfavorite_recipe(recipe_id):
 def view_favorites():
     return render_template("favorites.html", favorites=current_user.favorites)
 
+# Log out
 @myapp_obj.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('Logged out succesfully')
-    return redirect(url_for('main'))    
+    return redirect("/")
 
-@myapp_obj.route('/protected')
+# View User Profile
+@myapp_obj.route('/view/<string:username>')
+def view_profile(username):
+    user = User.query.filter_by(username=username).first()
+    return render_template("user.html", user=user)
+
+@myapp_obj.route('/edit_profile', methods=["GET", "POST"])
 @login_required
-def protected():
-    return render_template("protected.html")
-        
+def edit_profile():
+    form = EditUserForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        db.session.commit()
+    return render_template("edit_user.html", user=current_user, form=form)
+
+@myapp_obj.route('/recipe/<int:integer>/edit')
+@login_required
+def edit_recipe(integer):
+    form = EditRecipeForm()
+    recipe = Recipe.query.get(integer) # get recipe number
+    if form.validate_on_submit():
+        #edit recipe
+        recipe.title = form.title.data
+        recipe.description = form.description.data
+        recipe.ingredients = form.ingredients.data
+        recipe.instructions = form.instructions.data
+        db.session.commit()
+        return redirect(f"/recipe/{integer}")
+    return render_template("edit_recipe.html", recipe=recipe, form=form)
+

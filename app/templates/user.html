@@ -1,0 +1,42 @@
+<html>
+<head>
+        <title>{{user.username}}'s Profile</title>
+</head>
+<body>
+        <h1>{{user.username}}</h1>
+        <h3>{{user.username}}'s Recipes:</h3>
+    <ul>
+        {% for recipe in user.recipes %}
+            <li>
+                <ul>
+                    <li>{{recipe.title}}</li>
+                    <li>Description: {{recipe.description}}</li>
+                    <li>Ingredients: {{recipe.ingredients}}</li>
+                    <li>Instructions: {{recipe.instructions}}</li>
+                    <li>Date: {{recipe.date}}</li>
+                    <li>Posted by: {{ recipe.user.username }}</li>
+                </ul>
+            </li>
+        {% else %}
+            <li>{{user.username}} does not have any recipes.</li>
+        {% endfor %}
+    </ul>
+        <h3>{{user.username}}'s Favorites:</h3>
+    <ul>
+        {% for recipe in user.favorites %}
+            <li>
+                <ul>
+                    <li>{{recipe.title}}</li>
+                    <li>Posted by: {{ recipe.user.username }}</li>
+                </ul>
+            </li>
+        {% else %}
+            <li>{{user.username}} does not have any favorites.</li>
+        {% endfor %}
+    </ul>
+    {% if current_user.is_authenticated and current_user == user %}
+        <a href = "/logout">Logout</a>
+        <a href = "/edit_profile">Edit Profile</a>
+    {% endif %}
+</body>
+</html>

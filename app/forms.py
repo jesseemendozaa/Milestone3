@@ -12,14 +12,14 @@ class RecipeForm(FlaskForm): # form for creating recipe
     remember_me = BooleanField("Remember Me")
 
 class RegistrationForm(FlaskForm): # form for user registration
-    username = StringField('USERNAME', validators=[validators.DataRequired()])
+    username = StringField('Username', validators=[validators.DataRequired()])
     email = StringField('Email', validators=[validators.DataRequired(), validators.Email()])
     password = PasswordField('Password', validators=[validators.Length(min=4, max=35)])
     remember_me = BooleanField("Remember Me")
     submit =  SubmitField("Register")
 
 class LoginForm(FlaskForm):
-    username = StringField('USERNAME', validators=[validators.DataRequired()])
+    username = StringField('Username', validators=[validators.DataRequired()])
     password = PasswordField('Password', validators=[validators.DataRequired()])
     submit =  SubmitField("Login")
 
@@ -31,3 +31,14 @@ class CommentForm(FlaskForm):
 class RatingForm(FlaskForm):
     score = IntegerField('Rate (1-5)', validators=[validators.DataRequired(), NumberRange(min=1, max=5)])
     submit = SubmitField("Submit Rating")
+
+class EditUserForm(FlaskForm):
+    username = StringField('Username', validators=[validators.DataRequired()])
+    submit =  SubmitField("Apply")
+
+class EditRecipeForm(FlaskForm): # form for creating recipe
+    title = StringField('Title', validators=[validators.DataRequired()])
+    description = TextAreaField('Description', validators=[validators.DataRequired()]) 
+    ingredients = TextAreaField('Ingredients', validators=[validators.DataRequired()])
+    instructions = TextAreaField('Instructions', validators=[validators.DataRequired()])
+    submit =  SubmitField("Apply Changes")

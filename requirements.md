@@ -1,19 +1,19 @@
 ## Functional Requirements
 
-1. User Registration – The system shall allow users to register by providing a username, email, and password.
-2. User Login – The system shall authenticate users based on their credentials to allow access.
-3. User Logout – The system shall allow logged-in users to securely log out.
-4. Create Recipe – The system shall allow users to create and submit new recipes with ingredients and instructions.
+1. User Registration – The system shall allow users to register by providing a username, email, and password.           DONE
+2. User Login – The system shall authenticate users based on their credentials to allow access.                         DONE
+3. User Logout – The system shall allow logged-in users to securely log out.                                            DONE
+4. Create Recipe – The system shall allow users to create and submit new recipes with ingredients and instructions.     DONE
 5. Edit Recipe – The system shall allow users to edit their own submitted recipes.
-6. Delete Recipe – The system shall allow users to delete their own submitted recipes.
-7. View Recipe – The system shall allow all users to view any published recipe.
+6. Delete Recipe – The system shall allow users to delete their own submitted recipes.                                  DONE
+7. View Recipe – The system shall allow all users to view any published recipe.                                         DONE
 8. Search Recipe – The system shall allow users to search for recipes by keywords.
-9. Rate Recipe – The system shall allow users to rate recipes on a scale (e.g., 1–5 stars).
-10. Comment on Recipe – The system shall allow users to leave comments on recipe pages.
+9. Rate Recipe – The system shall allow users to rate recipes on a scale (e.g., 1–5 stars).                             DONE
+10. Comment on Recipe – The system shall allow users to leave comments on recipe pages.                                 DONE
 11. View User Profile – The system shall allow users to view their own profile including submitted recipes.
 12. Edit User Profile – The system shall allow users to edit their display name, email, or password.
-13. Save Recipe (Favorites) – The system shall allow users to save recipes to their favorites list.
-14. View All Recipes – The system shall allow users to view a list of all publicly available recipes.
+13. Save Recipe (Favorites) – The system shall allow users to save recipes to their favorites list.                     DONE
+14. View All Recipes – The system shall allow users to view a list of all publicly available recipes.                   DONE
 15. Filter Recipes – The system shall allow users to filter recipes by tags such as 'vegan', 'dessert', etc.
 
 ## Non-functional Requirements

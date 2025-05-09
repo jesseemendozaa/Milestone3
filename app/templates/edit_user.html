@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>Edit User</title>
+</head>
+<body>
+    <h2>Hey, {{ current_user.username }}!</h2>
+    <h3>Edit Your Credentials</h3>
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+
+        <p>{{ form.username.label }}<br>
+        {{ form.username() }}</p>
+
+        <p>{{ form.submit() }}</p>
+    </form>
+</body>
+</html>

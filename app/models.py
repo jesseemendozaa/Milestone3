@@ -15,8 +15,8 @@ class Recipe(db.Model): #Recipe created by user
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref='recipes')
-    ratings = db.relationship('Rating', backref='recipe') #relationship with rating
-    comments = db.relationship('Comment', backref='recipe') #relationship with comment
+    ratings = db.relationship('Rating', backref='rated_recipe') #relationship with rating
+    comments = db.relationship('Comment', backref='commented_recipe') #relationship with comment
 
 class User(db.Model, UserMixin): #Account info
     id = db.Column(db.Integer, primary_key=True)
@@ -25,7 +25,7 @@ class User(db.Model, UserMixin): #Account info
     password = db.Column(db.String(32), nullable = False) #max length 32 characters
     comments = db.relationship('Comment', backref='user') #relationship with comment
     ratings = db.relationship('Rating', backref='user')
-    favorites = db.relationship('Recipe', secondary=favorites, backref='favorited_by')
+    favorites = db.relationship('Recipe', secondary=favorites, backref='favoriters')
 
 class Comment (db.Model):
     id = db.Column(db.Integer, primary_key=True)
