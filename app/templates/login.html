@@ -1,13 +1,62 @@
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.username.label }}<br>
-        {{ form.username(size=32) }}
-    </p>
-    <p>
-        {{ form.password.label }}<br>
-        {{ form.password(size=32) }}
-    </p>
-    <p>{{ form.submit() }}</p>
-</form>
+{% extends "layout.html" %}
 
+{% block title %}Login{% endblock %}
+
+{% block head %}
+<style>
+    html, body {
+        background-color: var(--bs-body-bg);
+        background-image: url('/static/images/pretty_food.jpg');
+        background-position: right center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+    }
+
+    .form-container {
+        background-color: var(--bs-dark);
+        border-radius: 12px;
+        width: 33vw;
+        min-width: 350px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <p>
+                <div class="form-group">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control", id="usernameFormInput", placeholder="Username", size=32) }}
+                </div>
+            </p>
+            <p>
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}<br>
+                    {{ form.password(class="form-control", id="inputPassword2", placeholder="Password", size=32) }}
+                </div>
+            </p>
+            <p>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-primary mb-3") }}
+                </div>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}

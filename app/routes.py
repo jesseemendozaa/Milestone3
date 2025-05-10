@@ -125,8 +125,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and  user.password == password:
             login_user(user)
-            flash('Logged in successfully')
-            print("Logged in successfully")
+            flash('Logged in successfully', 'success')
             next_page = request.args.get('next')
             if next_page:
                 return redirect(next_page)
@@ -143,7 +142,6 @@ def favorite_recipe(recipe_id):
     if recipe is None:
         flash("Recipe not found")
         return redirect(url_for("main"))
-
     if recipe not in current_user.favorites:
         current_user.favorites.append(recipe)
         db.session.commit()
