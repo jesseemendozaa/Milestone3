@@ -1,42 +1,79 @@
-<html>
-<head>
-        <title>{{user.username}}'s Profile</title>
-</head>
-<body>
-        <h1>{{user.username}}</h1>
-        <h3>{{user.username}}'s Recipes:</h3>
-    <ul>
-        {% for recipe in user.recipes %}
-            <li>
-                <ul>
-                    <li>{{recipe.title}}</li>
-                    <li>Description: {{recipe.description}}</li>
-                    <li>Ingredients: {{recipe.ingredients}}</li>
-                    <li>Instructions: {{recipe.instructions}}</li>
-                    <li>Date: {{recipe.date}}</li>
-                    <li>Posted by: {{ recipe.user.username }}</li>
-                </ul>
-            </li>
-        {% else %}
-            <li>{{user.username}} does not have any recipes.</li>
-        {% endfor %}
-    </ul>
-        <h3>{{user.username}}'s Favorites:</h3>
-    <ul>
-        {% for recipe in user.favorites %}
-            <li>
-                <ul>
-                    <li>{{recipe.title}}</li>
-                    <li>Posted by: {{ recipe.user.username }}</li>
-                </ul>
-            </li>
-        {% else %}
-            <li>{{user.username}} does not have any favorites.</li>
-        {% endfor %}
-    </ul>
-    {% if current_user.is_authenticated and current_user == user %}
-        <a href = "/logout">Logout</a>
-        <a href = "/edit_profile">Edit Profile</a>
-    {% endif %}
+{% extends "layout.html" %}
+
+{% block title %}{{user.username}}'s Profile{% endblock %}
+
+{% block head %}
+<style>
+    html, body{
+        background-color: var(--bs-tertiary-bg);
+    }
+
+    .scrollable-container {
+        background-color: var(--bs-body-bg);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        height: 350px;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Profile Card -->
+  <div class="d-flex justify-content-center mb-4">
+    <div class="card text-center" style="width: 18rem; border: none; outline: none; background-color: var(--bs-tertiary-bg);">
+      <img src="/static/images/default_pfp.jpg" class="card-img-top rounded-circle mx-auto mt-3" alt="Profile Picture" style="width: 150px; height: 150px; object-fit: cover;">
+      <div class="card-body">
+                <h5 class="card-title">{{user.username}}</h5>
+                <!-- User logout or edit buttons (if logged in) -->
+                {% if current_user.is_authenticated and current_user == user %}
+                    <a href = "/logout">Logout</a>
+                    <a href = "/edit_profile">Edit Profile</a>
+                {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Scrollable Columns (Recipes and Comments) -->
+  <div class="row">
+
+        <div class="col-md-8 mb-3">
+            <h5 class="mb-3">Recipes</h5>
+                <div class="scrollable-container">
+                    {% for recipe in user.recipes %}
+                        <h6><a href = "/recipe/{{recipe.id}}">{{recipe.title}}</a></h6>
+                        <p class="text-muted">
+                            {{recipe.description}}
+                        </p>
+                        {% else %}
+                        <p>
+                            <h6>No recipes found.</h6>
+                        </p>
+                    {% endfor %}
+                </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <h5 class="mb-3">Comments</h5>
+                <div class="scrollable-container">
+                    {% for comment in user.comments %}
+                        <p class="text-muted">
+                            {{comment.comment}}
+                        </p>
+                        <h6><a href = "/recipe/{{comment.recipe_id}}">Go to recipe<a></h6>
+                        {% else %}
+                        <p>
+                            <h6>No comments found.</h6>
+                        </p>
+                    {% endfor %}
+                </div>
+        </div>
+  </div>
+</div>
+{% endblock %}
 </body>
 </html>
+
+
