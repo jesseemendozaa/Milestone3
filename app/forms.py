@@ -8,6 +8,7 @@ class RecipeForm(FlaskForm): # form for creating recipe
     description = TextAreaField('Description', validators=[validators.DataRequired()]) 
     ingredients = TextAreaField('Ingredients', validators=[validators.DataRequired()])
     instructions = TextAreaField('Instructions', validators=[validators.DataRequired()])
+    tags = StringField('Tags (comma-separated)', validators=[validators.Optional()])
     submit =  SubmitField("Create Recipe")
     remember_me = BooleanField("Remember Me")
 
@@ -41,8 +42,14 @@ class EditRecipeForm(FlaskForm): # form for creating recipe
     description = TextAreaField('Description', validators=[validators.DataRequired()]) 
     ingredients = TextAreaField('Ingredients', validators=[validators.DataRequired()])
     instructions = TextAreaField('Instructions', validators=[validators.DataRequired()])
+    tags = StringField('Tags (comma-separated)', validators=[validators.Optional()])
     submit =  SubmitField("Apply Changes")
 
 class SearchForm(FlaskForm):
     search_query= StringField('Search', validators=[validators.Optional()])
     submit = SubmitField('Search')
+
+class EnhancedSearchForm(FlaskForm):
+    search_query = StringField('Search', validators=[validators.Optional()])
+    tags = StringField('Tags (comma-separated)', validators=[validators.Optional()])
+    submit = SubmitField('Enhanced Search')

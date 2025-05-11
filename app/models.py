@@ -12,6 +12,7 @@ class Recipe(db.Model): #Recipe created by user
     ingredients = db.Column(db.Text) #text box
     instructions = db.Column(db.Text) #text box
     date = db.Column(db.DateTime)
+    tags = db.Column(db.String(200)) # tags with commas
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref='recipes')

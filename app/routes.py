@@ -50,7 +50,15 @@ def create_recipe():
     form = RecipeForm()
     if form.validate_on_submit():
         #create recipe
-        new_recipe = Recipe(title=form.title.data, description=form.description.data, ingredients=form.ingredients.data, instructions=form.instructions.data, date=datetime.now(), user_id=current_user.id) #1
+        new_recipe = Recipe(
+            title=form.title.data,
+            description=form.description.data,
+            ingredients=form.ingredients.data,
+            instructions=form.instructions.data,
+            tags=form.tags.data,
+            date=datetime.now(),
+            user_id=current_user.id
+        )
         db.session.add(new_recipe) #adding to database
         db.session.commit()
         return redirect("/")
@@ -213,6 +221,8 @@ def edit_recipe(integer):
                 recipe.ingredients = form.ingredients.data
             if form.instructions.data:
                 recipe.instructions = form.instructions.data
+            if form.tags.data:
+                recipe.tags = form.tags.data
             db.session.commit()
             flash("Recipe successfully changed.", "success")
             return redirect(f"/recipe/{integer}")
@@ -240,3 +250,35 @@ def search_recipes():
         ).all()
         return render_template('search_result.html', recipes = recipes, form = form)
     return render_template('search.html', form = form)
+
+@myapp_obj.route('/enhanced-search', methods=['GET', 'POST'])
+def enhanced_search():
+    form = EnhancedSearchForm()
+    if form.validate_on_submit():
+        search_query = form.search_query.data
+        tags_input = form.tags.data
+
+        # Start with base query
+        query = Recipe.query
+
+        # Apply text search if provided
+        if search_query:
+            query = query.filter(
+                db.or_(
+                    Recipe.title.ilike(f'%{search_query}%'),
+                    Recipe.description.ilike(f'%{search_query}%'),
+                    Recipe.ingredients.ilike(f'%{search_query}%'),
+                    Recipe.instructions.ilike(f'%{search_query}%')
+                )
+            )
+
+        # Apply tag filtering if provided
+        if tags_input:
+            tag_names = [tag.strip() for tag in tags_input.split(',')]
+            for tag_name in tag_names:
+                query = query.filter(Recipe.tags.ilike(f'%{tag_name}%'))
+
+        recipes = query.all()
+        return render_template('enhanced_search_result.html', recipes=recipes, form=form)
+    
+    return render_template('enhanced_search.html', form=form)

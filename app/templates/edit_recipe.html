@@ -74,6 +74,12 @@
                             </p>
                             <p>
                                 <div class="form-group">
+                                    {{ form.tags.label(class="form-label") }}
+                                    {{ form.tags(class="form-control", id="tagsFormInput", placeholder="Enter tags separated by commas (e.g., vegetarian, quick, dinner)") }}
+                                </div>
+                            </p>
+                            <p>
+                                <div class="form-group">
                                     {{ form.submit(class="btn btn-primary") }}
                                 </div>
                             </p>
