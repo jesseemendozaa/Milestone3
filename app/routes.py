@@ -105,7 +105,7 @@ def register():
         password = form.password.data #1
         users = User.query.all()
         if email in users:
-            flash("Email is taken.")
+            flash("Email is taken.", 'error')
         else:
             u = User(username=username, email=email, password=password) #1
             db.session.add(u)#1
@@ -117,6 +117,7 @@ def register():
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
+        flash("You are already logged in.")
         return redirect(f'/view/{current_user.username}')
     form = LoginForm()
     if form.validate_on_submit():
@@ -131,7 +132,7 @@ def login():
                 return redirect(next_page)
             return redirect(url_for("view_profile", username=username))
         else:
-            flash('Invalid username or password.')
+            flash('Invalid username or password.', 'error')
     return render_template("login.html", form=form)
 
 #Favorites
@@ -140,12 +141,12 @@ def login():
 def favorite_recipe(recipe_id):
     recipe = Recipe.query.get(recipe_id)
     if recipe is None:
-        flash("Recipe not found")
+        flash("Recipe not found", 'error')
         return redirect(url_for("main"))
     if recipe not in current_user.favorites:
         current_user.favorites.append(recipe)
         db.session.commit()
-        flash("Recipe added to favorites")
+        flash("Recipe added to favorites", 'success')
 
     return redirect(url_for("view_favorites"))
 
@@ -155,13 +156,13 @@ def favorite_recipe(recipe_id):
 def unfavorite_recipe(recipe_id):
     recipe = Recipe.query.get(recipe_id)
     if recipe is None:
-        flash("Recipe not found")
+        flash("Recipe not found", 'error')
         return redirect(url_for("main"))
 
     if recipe in current_user.favorites:
         current_user.favorites.remove(recipe)
         db.session.commit()
-        flash("Recipe removed from favorites")
+        flash("Recipe removed from favorites", 'success')
 
     return redirect(url_for("view_favorites"))
 
@@ -176,13 +177,15 @@ def view_favorites():
 @login_required
 def logout():
     logout_user()
-    flash('Logged out succesfully')
+    flash('Logged out succesfully', 'success')
     return redirect("/")
 
 # View User Profile
 @myapp_obj.route('/view/<string:username>')
 def view_profile(username):
     user = User.query.filter_by(username=username).first()
+    if not user:
+        flash("User not found.", 'error')
     return render_template("user.html", user=user)
 
 @myapp_obj.route('/edit_profile', methods=["GET", "POST"])
@@ -207,5 +210,9 @@ def edit_recipe(integer):
         recipe.instructions = form.instructions.data
         db.session.commit()
         return redirect(f"/recipe/{integer}")
-    return render_template("edit_recipe.html", recipe=recipe, form=form)
+    if recipe.user == current_user:
+        return render_template("edit_recipe.html", recipe=recipe, form=form)
+    else:
+        flash("You cannot edit recipes you don't own.", "error")
+        return redirect(url_for("login"))
 
