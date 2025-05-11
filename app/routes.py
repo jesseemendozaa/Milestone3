@@ -220,4 +220,23 @@ def edit_recipe(integer):
     else:
         flash("You cannot edit recipes you don't own.", "error")
         return redirect(url_for("login"))
+    
 
+
+@myapp_obj.route('/search', methods =['GET', 'POST'])
+def search_recipes():
+    form = SearchForm()
+    if form.validate_on_submit():
+        search_query = form.search_query.data
+        
+        recipes = Recipe.query.filter(
+            db.or_(
+                Recipe.title.ilike(f'%{search_query}%'),
+                Recipe.description.ilike(f'%{search_query}%'),
+                Recipe.ingredients.ilike(f'%{search_query}%'),
+                Recipe.instructions.ilike(f'%{search_query}%'),
+
+            )
+        ).all()
+        return render_template('search_result.html', recipes = recipes, form = form)
+    return render_template('search.html', form = form)

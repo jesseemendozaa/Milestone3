@@ -42,3 +42,7 @@ class EditRecipeForm(FlaskForm): # form for creating recipe
     ingredients = TextAreaField('Ingredients', validators=[validators.DataRequired()])
     instructions = TextAreaField('Instructions', validators=[validators.DataRequired()])
     submit =  SubmitField("Apply Changes")
+
+class SearchForm(FlaskForm):
+    search_query= StringField('Search', validators=[validators.Optional()])
+    submit = SubmitField('Search')

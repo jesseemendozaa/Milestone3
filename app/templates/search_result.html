@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title> Search Results</title>
+    </head>
+    <body>
+        <h1> Search Results</h1>
+        <form method="POST">
+            {{ form.hidden_tag()}}
+            <p>
+                {{form.search_query.label}}<br>
+                {{form.search_query(size=32)}}
+            </p>
+            <p>{{form.submit}}</p>
+        </form>
+        {% if recipes %}
+            <u1>
+                {% for recipe in recipes %}
+                <li>
+                    <a href="{{url_for('return_recipe', integer=recipe.id)}}">{{ recipe.title}}</a>
+                    <p>Description: {{ recipe.description}}</p>
+                    <p>Posted by: {{recipe.user.username }}</p>
+                </li>
+                {% endfor %}
+            </u1>
+            {% else %}
+            <p> No recipes found matching your search. </p>
+            {% endif %}
+            <a href="{{ url_for('view_all_recipes')}}">Back to ALL RECIPES</a>
+    </body>
+</html>
