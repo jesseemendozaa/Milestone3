@@ -197,20 +197,25 @@ def edit_profile():
         db.session.commit()
     return render_template("edit_user.html", user=current_user, form=form)
 
-@myapp_obj.route('/recipe/<int:integer>/edit')
+@myapp_obj.route('/recipe/<int:integer>/edit', methods=["GET", "POST"])
 @login_required
 def edit_recipe(integer):
     form = EditRecipeForm()
     recipe = Recipe.query.get(integer) # get recipe number
-    if form.validate_on_submit():
-        #edit recipe
-        recipe.title = form.title.data
-        recipe.description = form.description.data
-        recipe.ingredients = form.ingredients.data
-        recipe.instructions = form.instructions.data
-        db.session.commit()
-        return redirect(f"/recipe/{integer}")
     if recipe.user == current_user:
+        if form.validate_on_submit():
+            #edit recipe
+            if form.title.data:
+                recipe.title = form.title.data
+            if form.description.data:
+                recipe.description = form.description.data
+            if form.ingredients.data:
+                recipe.ingredients = form.ingredients.data
+            if form.instructions.data:
+                recipe.instructions = form.instructions.data
+            db.session.commit()
+            flash("Recipe successfully changed.", "success")
+            return redirect(f"/recipe/{integer}")
         return render_template("edit_recipe.html", recipe=recipe, form=form)
     else:
         flash("You cannot edit recipes you don't own.", "error")
