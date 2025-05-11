@@ -99,10 +99,13 @@ def return_recipe(integer):
 @myapp_obj.route("/recipe/<int:integer>/delete") # http://127.0.0.1:5000/recipe/<enter number here>/delete
 def delete_recipe(integer):
     del_rec = Recipe.query.get(integer) # get recipe number
-    db.session.delete(del_rec) #delete
-    db.session.commit()
-
-    return f"Recipe deleted: {integer}"
+    if current_user == del_rec.user:
+        db.session.delete(del_rec) #delete
+        db.session.commit()
+        return redirect(url_for("login"))
+    else:
+        flash("You must own a recipe to delete it.", "error")
+        return redirect(url_for("login"))
 
 @myapp_obj.route("/registration", methods=['GET', 'POST'])
 def register():
@@ -210,7 +213,13 @@ def edit_profile():
 def edit_recipe(integer):
     form = EditRecipeForm()
     recipe = Recipe.query.get(integer) # get recipe number
-    if recipe.user == current_user:
+    if recipe == None:
+        flash("Recipe does not exist.", "error")
+        return redirect(url_for("login"))
+    else:
+        if recipe.user != current_user:
+            flash("You cannot edit recipes you don't own.", "error")
+            return redirect(url_for("login"))
         if form.validate_on_submit():
             #edit recipe
             if form.title.data:
@@ -227,27 +236,32 @@ def edit_recipe(integer):
             flash("Recipe successfully changed.", "success")
             return redirect(f"/recipe/{integer}")
         return render_template("edit_recipe.html", recipe=recipe, form=form)
-    else:
-        flash("You cannot edit recipes you don't own.", "error")
-        return redirect(url_for("login"))
-    
-
 
 @myapp_obj.route('/search', methods =['GET', 'POST'])
 def search_recipes():
+    query = request.args.get('query')
     form = SearchForm()
-    if form.validate_on_submit():
-        search_query = form.search_query.data
-        
+    if not query:
+        if form.validate_on_submit():
+            search_query = form.search_query.data
+            
+            recipes = Recipe.query.filter(
+                db.or_(
+                    Recipe.title.ilike(f'%{search_query}%'),
+                    Recipe.description.ilike(f'%{search_query}%'),
+                    Recipe.ingredients.ilike(f'%{search_query}%'),
+                    Recipe.instructions.ilike(f'%{search_query}%'),
+                )
+            ).all()
+    else:
         recipes = Recipe.query.filter(
-            db.or_(
-                Recipe.title.ilike(f'%{search_query}%'),
-                Recipe.description.ilike(f'%{search_query}%'),
-                Recipe.ingredients.ilike(f'%{search_query}%'),
-                Recipe.instructions.ilike(f'%{search_query}%'),
-
-            )
-        ).all()
+                db.or_(
+                    Recipe.title.ilike(f'%{query}%'),
+                    Recipe.description.ilike(f'%{query}%'),
+                    Recipe.ingredients.ilike(f'%{query}%'),
+                    Recipe.instructions.ilike(f'%{query}%'),
+                )
+            ).all()
         return render_template('search_result.html', recipes = recipes, form = form)
     return render_template('search.html', form = form)
 

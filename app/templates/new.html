@@ -1,28 +1,65 @@
-<html>
-<head>
-    <title>Create Recipe Here</title>
-</head>
-<body>
-    <h1>Create Recipe</h1>
-    <form action="" method="POST" novalidate>
-        {{form.hidden_tag()}}
-        <p> {{form.title.label}}</br>
-        {{form.title()}}</p>
+{% extends "layout.html" %}
 
-        <p>{{form.description.label}}</br>
-            <p>{{form.description()}}</p>
+{% block title %}Make Recipe{% endblock %}
 
-        <p>{{form.ingredients.label}}</br>
-            <p>{{form.ingredients()}}</p>
-        
-        <p>{{form.instructions.label}}</br>
-            <p>{{form.instructions()}}</p>
+{% block head %}
+<style>
+    html, body{
+        background-color: var(--bs-tertiary-bg);
+    }
 
-        <p>{{form.tags.label}}</br>
-            <p>{{form.tags()}}</p>
+    .scrollable-container {
+        background-color: var(--bs-body-bg);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        height: 80vh;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
 
-        <p>{{form.submit()}}</p>
-        <p>{{form.remember_me()}}</p>
-    </form>
-</body>
-</html>
+{% block content %}
+<div class="col-md-12 mb-3">
+            <h5 class="mb-3">Input Details</h5>
+                <div class="scrollable-container">
+                    <form action="" method="POST">
+                    {{ form.hidden_tag() }}
+                            <p>
+                                <div class="form-group">
+                                    {{ form.title.label(class="form-label") }}
+                                    {{ form.title(class="form-control", id="titleFormInput", placeholder="Title") }}
+                                </div>
+                            </p>
+                            <p>
+                                <div class="form-group">
+                                    {{ form.description.label(class="form-label") }}
+                                    {{ form.description(class="form-control", id="detailsFormInput", placeholder="Recipe description", style="height: 200px") }}
+                                </div>
+                            </p>
+                            <p>
+                                <div class="form-group">
+                                    {{ form.ingredients.label(class="form-label") }}
+                                    {{ form.ingredients(class="form-control", id="detailsFormInput", placeholder="Recipe ingredients", style="height: 200px") }}
+                                </div>
+                            </p>
+                            <p>
+                                <div class="form-group">
+                                    {{ form.instructions.label(class="form-label") }}<br>
+                                    {{ form.instructions(class="form-control", id="instructionsFormInput", placeholder="Recipe instructions", style="height: 300px") }}
+                                </div>
+                            </p>
+                            <p>
+                                <div class="form-group">
+                                    {{ form.tags.label(class="form-label") }}
+                                    {{ form.tags(class="form-control", id="tagsFormInput", placeholder="Enter tags separated by commas (e.g., vegetarian, quick, dinner)") }}
+                                </div>
+                            </p>
+                            <p>
+                                <div class="form-group">
+                                    {{ form.submit(class="btn btn-primary") }}
+                                </div>
+                            </p>
+                </div>
+        </div>
+{% endblock %}
