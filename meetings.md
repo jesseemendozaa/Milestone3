@@ -8,3 +8,8 @@
 
     Next we plan on completing further implementations posted on Milestone 1
 
+### 2025-04-22 --> 2025-05-11
+    Utilizing github for version control, async work was completed.
+    Any confusions and questions were asked in a discord chat.
+    Overall, just collaborators working on their own times utilizing a
+    chat service to stay connected, up-to-date, and for any questions and concerns.

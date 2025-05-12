@@ -44,7 +44,7 @@ ALREADY IMPLEMENTED</br>
 7. View Recipe – The system shall allow all users to view any published recipe.</br>
 ALREADY IMPLEMENTED</br>
 8. Search Recipe – The system shall allow users to search for recipes by keywords.</br>
-IMPLEMENTED BY 
+IMPLEMENTED BY ERIC
 9. Rate Recipe – The system shall allow users to rate recipes on a scale (e.g., 1–5 stars).</br>
 IMPLEMENTED BY JESSE</br>
 10. Comment on Recipe – The system shall allow users to leave comments on recipe pages.</br>
@@ -58,5 +58,5 @@ IMPLEMENTED BY JESSE</br>
 14. View All Recipes – The system shall allow users to view a list of all publicly available recipes.</br>
 ALREADY IMPLEMENTED</br>
 15. Filter Recipes – The system shall allow users to filter recipes by tags such as 'vegan', 'dessert', etc.</br>
-IMPLEMENTED BY 
+IMPLEMENTED BY ERIC
 </p>
