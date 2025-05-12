@@ -28,6 +28,9 @@ To stop the python virtual environment, run in the terminal:
 deactivate
 ```
 
+# Link to Presentation:
+[Link](https://drive.google.com/file/d/1jtiDcD8HM7mDOrOEqFsk_xjzMOBqo4N3/view?usp=sharing)
+
 # Functionalities Implemented (All 15)
 <p>1. User Registration – The system shall allow users to register by providing a username, email, and password.</br>
 ALREADY IMPLEMENTED</br>
