@@ -58,6 +58,8 @@
         <li class="nav-item">
               <a class="nav-link active" aria-disable="true">My Favorites</a>
           {% endif %}
+        <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/recipes">All Recipes</a>
       </ul>
       <form class="d-flex" action="{{ url_for('search_recipes') }}" method="GET">
         <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search"/>

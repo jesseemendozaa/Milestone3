@@ -16,8 +16,8 @@ class Recipe(db.Model): #Recipe created by user
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref='recipes')
-    ratings = db.relationship('Rating', backref='rated_recipe') #relationship with rating
-    comments = db.relationship('Comment', backref='commented_recipe') #relationship with comment
+    ratings = db.relationship('Rating', backref='rated_recipe', cascade="all, delete-orphan") #relationship with rating
+    comments = db.relationship('Comment', backref='commented_recipe', cascade="all, delete-orphan") #relationship with comment
 
 class User(db.Model, UserMixin): #Account info
     id = db.Column(db.Integer, primary_key=True)
@@ -32,13 +32,14 @@ class Comment (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.Text, nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id', ondelete='CASCADE'), nullable=False)
+    recipe = db.relationship('Recipe', backref="specific_comment")
 
 class Rating (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     score = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id', ondelete='CASCADE'), nullable=False)
 
 
 @login_manager.user_loader

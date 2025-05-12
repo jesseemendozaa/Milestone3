@@ -102,6 +102,7 @@ def delete_recipe(integer):
     if current_user == del_rec.user:
         db.session.delete(del_rec) #delete
         db.session.commit()
+        flash("Recipe successfully deleted", "success")
         return redirect(url_for("login"))
     else:
         flash("You must own a recipe to delete it.", "error")
