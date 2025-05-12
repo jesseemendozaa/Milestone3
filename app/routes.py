@@ -117,6 +117,7 @@ def register():
         users = User.query.all()
         if email in users:
             flash("Email is taken.", 'error')
+            return redirect(url_for("register"))
         else:
             u = User(username=username, email=email, password=password) #1
             db.session.add(u)#1
@@ -147,9 +148,9 @@ def login():
     return render_template("login.html", form=form)
 
 #Favorites
-@myapp_obj.route("/favorite/<int:recipe_id>", methods=["POST"])
+@myapp_obj.route("/toggle_favorite/<int:recipe_id>", methods=["POST"])
 @login_required
-def favorite_recipe(recipe_id):
+def toggle_favorite(recipe_id):
     recipe = Recipe.query.get(recipe_id)
     if recipe is None:
         flash("Recipe not found", 'error')
@@ -158,23 +159,11 @@ def favorite_recipe(recipe_id):
         current_user.favorites.append(recipe)
         db.session.commit()
         flash("Recipe added to favorites", 'success')
-
-    return redirect(url_for("view_favorites"))
-
-#Unfavorites
-@myapp_obj.route("/unfavorite/<int:recipe_id>", methods=["POST"])
-@login_required
-def unfavorite_recipe(recipe_id):
-    recipe = Recipe.query.get(recipe_id)
-    if recipe is None:
-        flash("Recipe not found", 'error')
-        return redirect(url_for("main"))
-
-    if recipe in current_user.favorites:
-        current_user.favorites.remove(recipe)
-        db.session.commit()
-        flash("Recipe removed from favorites", 'success')
-
+    else:
+        if recipe in current_user.favorites:
+            current_user.favorites.remove(recipe)
+            db.session.commit()
+            flash("Recipe removed from favorites", 'success')
     return redirect(url_for("view_favorites"))
 
 # View Favorites

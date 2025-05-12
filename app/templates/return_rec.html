@@ -42,8 +42,18 @@
                         {{recipe.instructions}}
                     </p>
                 <hr class="my-4">
-        <h5 class="text-muted">Posted By <a href="/view/{{ recipe.user.username }}">{{ recipe.user.username }}</a></h5>
-        <h6 class="text-muted"><a href="favorite/{{ recipe.id }}">Add to Favorites</a></h6>
+            <h5 class="text-muted">Posted By <a href="/view/{{ recipe.user.username }}">{{ recipe.user.username }}</a></h5>
+            <form action="{{ url_for('toggle_favorite', recipe_id=recipe.id) }}" method="POST">
+                  <input type="hidden" name="next" value="{{ request.path }}">
+                  {% if recipe in current_user.favorites %}
+                    <button type="submit" class="btn btn-primary">Unfavorite</button>
+                  {% else %}
+                    <button type="submit" class="btn btn-primary">Favorite</button>
+                  {% endif %}
+                </form>
+            {% if current_user == recipe.user %}
+            <h6 class="text-muted"><a href="/recipe/{{ recipe.id }}/edit">Edit</a></h6>
+            {% endif %}
         </div>
     </div>
 

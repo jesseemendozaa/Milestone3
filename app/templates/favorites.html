@@ -1,23 +1,42 @@
-<html>
-<head>
-    <title>My Favorite Recipes</title>
-</head>
-<body>
-    <h1>My Favorite Recipes</h1>
+{% extends "layout.html" %}
 
-    {% if favorites %}
-        <ul>
-            {% for recipe in favorites %}
-                <li>
-                    <a href="{{ url_for('return_recipe', integer=recipe.id) }}">{{ recipe.title }}</a>
-                    <form action="{{ url_for('unfavorite_recipe', recipe_id=recipe.id) }}" method="POST">
-                        <button type="submit">Remove</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>You haven't saved any recipes to your favorites yet. Please add some recipes to your favorites.</p>
-    {% endif %}
-</body>
-</html>
+{% block title %}My Favorites{% endblock %}
+
+{% block head %}
+<style>
+    html, body{
+        background-color: var(--bs-tertiary-bg);
+    }
+
+    .scrollable-container {
+        background-color: var(--bs-body-bg);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        height: 80vh;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+
+        <div class="col-md-12 mb-3">
+            <h5 class="mb-3">Your Favorites</h5>
+                <div class="scrollable-container">
+                    {% for recipe in current_user.favorites %}
+                        <h6><a href = "/recipe/{{recipe.id}}">{{recipe.title}}</a></h6>
+                        <p class="text-muted">
+                            {{recipe.description}}
+                        </p>
+                        {% else %}
+                        <p>
+                            <h6>No recipes found.</h6>
+                        </p>
+                    {% endfor %}
+                </div>
+        </div>
+</div>
+{% endblock %}

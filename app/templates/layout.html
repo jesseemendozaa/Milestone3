@@ -48,8 +48,15 @@
               <a class="nav-link active" aria-current="page" href="/view/{{ current_user.username }}">Account</a>
         <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/recipe/new">Create</a>
+        <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/favorites">My Favorites</a>
           {% else %}
+        <li class="nav-item">
               <a class="nav-link disable" aria-disabled="true">Account</a>
+        <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/recipe/new">Create</a>
+        <li class="nav-item">
+              <a class="nav-link active" aria-disable="true">My Favorites</a>
           {% endif %}
       </ul>
       <form class="d-flex" action="{{ url_for('search_recipes') }}" method="GET">
