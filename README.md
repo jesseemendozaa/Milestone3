@@ -1,4 +1,4 @@
-## Milestone 2 - Recipes
+## Milestone 3
 - Jesse Mendoza (@jesseemendozaa)
 - Rustico Cruz (@Rooosti)
 - Eric Lazarit-Orozco (@ericlazarit)
